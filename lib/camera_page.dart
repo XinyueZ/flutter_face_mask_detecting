@@ -21,6 +21,8 @@ class _CameraPageState extends State<CameraPage> {
   CameraController _controller;
   bool _isDetecting = false;
 
+  bool _rear = true;
+
   List<dynamic> _recognitions;
   int _imageHeight = 0;
   int _imageWidth = 0;
@@ -34,11 +36,29 @@ class _CameraPageState extends State<CameraPage> {
   @override
   void initState() {
     super.initState();
+    _setupCamera();
+  }
+
+  void _setupCamera() {
     if (widget._cameras == null || widget._cameras.isEmpty) {
       print('No camera is found');
     } else {
-      _setupCamera();
+      _controller = CameraController(
+        widget._cameras[_rear ? 0 : 1],
+        ResolutionPreset.max,
+      );
+      _controller.initialize().then((_) {
+        if (_updateCamera()) {
+          _readFrames();
+        }
+      });
     }
+  }
+
+  Future<void> _switchCameraLens() async {
+    _rear = !_rear;
+    await _controller?.dispose();
+    _setupCamera();
   }
 
   bool _updateCamera() {
@@ -71,8 +91,8 @@ class _CameraPageState extends State<CameraPage> {
             bytesList: img.planes.map((Plane plane) {
               return plane.bytes;
             }).toList(),
-            imageHeight: img.height,
             imageWidth: img.width,
+            imageHeight: img.height,
             numResults: 2,
           ).then((List<dynamic> recognitions) {
             _updateRecognitions(
@@ -85,18 +105,6 @@ class _CameraPageState extends State<CameraPage> {
         }
       },
     );
-  }
-
-  void _setupCamera() {
-    _controller = CameraController(
-      widget._cameras[0],
-      ResolutionPreset.high,
-    );
-    _controller.initialize().then((_) {
-      if (_updateCamera()) {
-        _readFrames();
-      }
-    });
   }
 
   @override
@@ -116,6 +124,12 @@ class _CameraPageState extends State<CameraPage> {
     final double previewRatio = previewH / previewW;
 
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async => _switchCameraLens(),
+        child: Icon(_rear ? Icons.camera_front : Icons.camera_rear),
+        backgroundColor: Colors.green,
+      ),
       body: SafeArea(
         child: Stack(
           children: <Widget>[
