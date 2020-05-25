@@ -18,27 +18,45 @@ class Overlay extends StatelessWidget {
   final double _screenH;
   final double _screenW;
 
+  Color _updateBorderColor(List<dynamic> bits) {
+    String label;
+
+    if (bits.length > 1) {
+      final String firstLabel = bits.first["label"] as String;
+      final double firstConfidence = bits.first["confidence"] as double;
+
+      final String secondLabel = bits.last["label"] as String;
+      final double secondConfidence = bits.last["confidence"] as double;
+
+      if (firstConfidence > secondConfidence) {
+        label = firstLabel;
+      } else {
+        label = secondLabel;
+      }
+    }
+    if (bits.length == 1) {
+      label = bits.first["label"] as String;
+    }
+
+    if (label == "without_mask") {
+      return Colors.red;
+    }
+
+    if (label == "with_mask") {
+      return Colors.greenAccent;
+    }
+    return Colors.transparent;
+  }
+
   @override
   Widget build(BuildContext context) {
-    double offset = -10;
-    return Stack(children: <Widget>[
-      ..._results.map((dynamic bit) {
-        offset = offset + 14;
-        return Positioned(
-          left: 10,
-          top: offset,
-          width: _screenW,
-          height: _screenH,
-          child: Text(
-            "${bit["label"]} ${(bit["confidence"] * 100).toStringAsFixed(0)}%",
-            style: const TextStyle(
-              color: Color.fromRGBO(37, 213, 253, 1.0),
-              fontSize: 14.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        );
-      }).toList(),
-    ]);
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.fromBorderSide(BorderSide(
+          color: _updateBorderColor(_results),
+          width: 15,
+        )),
+      ),
+    );
   }
 }

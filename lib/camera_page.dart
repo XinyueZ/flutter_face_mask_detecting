@@ -130,27 +130,25 @@ class _CameraPageState extends State<CameraPage> {
         child: Icon(_rear ? Icons.camera_front : Icons.camera_rear),
         backgroundColor: Colors.green,
       ),
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            OverflowBox(
-              maxHeight: screenRatio > previewRatio
-                  ? screenH
-                  : screenW / previewW * previewH,
-              maxWidth: screenRatio > previewRatio
-                  ? screenH / previewH * previewW
-                  : screenW,
-              child: CameraPreview(_controller),
-            ),
-            ol.Overlay(
-              results: _recognitions ?? <dynamic>[],
-              previewH: max(_imageHeight, _imageWidth),
-              previewW: min(_imageHeight, _imageWidth),
-              screenH: screen.height,
-              screenW: screen.width,
-            )
-          ],
-        ),
+      body: Stack(
+        children: <Widget>[
+          OverflowBox(
+            maxHeight: screenRatio > previewRatio
+                ? screenH
+                : screenW / previewW * previewH,
+            maxWidth: screenRatio > previewRatio
+                ? screenH / previewH * previewW
+                : screenW,
+            child: CameraPreview(_controller),
+          ),
+          ol.Overlay(
+            results: _recognitions ?? <dynamic>[],
+            previewH: max(_imageHeight, _imageWidth),
+            previewW: min(_imageHeight, _imageWidth),
+            screenH: screen.height,
+            screenW: screen.width,
+          )
+        ],
       ),
     );
   }
