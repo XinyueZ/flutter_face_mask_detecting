@@ -1,9 +1,10 @@
+import 'dart:math';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_face_mask_detecting/overlay.dart' as ol;
 import 'package:tflite/tflite.dart';
-import 'dart:math';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({
@@ -24,8 +25,6 @@ class _CameraPageState extends State<CameraPage> {
   bool _rear = true;
 
   List<dynamic> _recognitions;
-  int _imageHeight = 0;
-  int _imageWidth = 0;
 
   @override
   void dispose() {
@@ -71,13 +70,9 @@ class _CameraPageState extends State<CameraPage> {
 
   void _updateRecognitions({
     List<dynamic> recognitions,
-    int imageWidth,
-    int imageHeight,
   }) {
     setState(() {
       _recognitions = recognitions;
-      _imageWidth = imageWidth;
-      _imageHeight = imageHeight;
     });
   }
 
@@ -97,8 +92,6 @@ class _CameraPageState extends State<CameraPage> {
           ).then((List<dynamic> recognitions) {
             _updateRecognitions(
               recognitions: recognitions,
-              imageWidth: img.width,
-              imageHeight: img.height,
             );
             _isDetecting = false;
           });
@@ -143,10 +136,6 @@ class _CameraPageState extends State<CameraPage> {
           ),
           ol.Overlay(
             results: _recognitions ?? <dynamic>[],
-            previewH: max(_imageHeight, _imageWidth),
-            previewW: min(_imageHeight, _imageWidth),
-            screenH: screen.height,
-            screenW: screen.width,
           )
         ],
       ),

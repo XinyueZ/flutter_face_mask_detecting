@@ -3,24 +3,15 @@ import 'package:flutter/material.dart';
 class Overlay extends StatelessWidget {
   const Overlay({
     @required List<dynamic> results,
-    @required int previewH,
-    @required int previewW,
-    @required double screenH,
-    @required double screenW,
-  })  : _results = results,
-        _previewH = previewH,
-        _previewW = previewW,
-        _screenH = screenH,
-        _screenW = screenW;
+  }) : _results = results;
   final List<dynamic> _results;
-  final int _previewH;
-  final int _previewW;
-  final double _screenH;
-  final double _screenW;
 
   Color _updateBorderColor(List<dynamic> bits) {
-    String label;
+    if (bits == null) {
+      return Colors.transparent;
+    }
 
+    String label;
     if (bits.length > 1) {
       final String firstLabel = bits.first["label"] as String;
       final double firstConfidence = bits.first["confidence"] as double;
