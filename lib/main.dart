@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_face_mask_detecting/camera_page.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:tflite/tflite.dart';
 
 Future<void> main() async {
@@ -26,6 +27,9 @@ class MaskDetectingApp extends StatelessWidget {
       title: 'Face mask detecting',
       theme: ThemeData(
         brightness: Brightness.dark,
+      ),
+      builder: (BuildContext context, Widget widget) => OKToast(
+        child: widget,
       ),
       home: CameraPage(
         cameras: _cameras,
