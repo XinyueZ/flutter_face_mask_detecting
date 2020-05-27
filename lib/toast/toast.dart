@@ -38,7 +38,7 @@ class Toast {
           onTap: () => dismissAllToast(showAnim: true),
           child: Text(
             "OK",
-            style: Theme.of(context).textTheme.headline6.copyWith(
+            style: Theme.of(context).textTheme.overline.copyWith(
                   color: Colors.white,
                 ),
           ),
@@ -87,7 +87,7 @@ class Toast {
                     overflow: TextOverflow.clip,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .bodyText1
                         .copyWith(color: Colors.white),
                   ),
                 ),
