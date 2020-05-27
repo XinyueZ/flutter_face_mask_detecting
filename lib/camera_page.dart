@@ -22,7 +22,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   CameraController _controller;
   bool _isDetecting = false;
 
-  bool _rear = true;
+  bool _rear = false;
 
   List<dynamic> _recognitions;
 
